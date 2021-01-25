@@ -4,7 +4,7 @@ Based on a [gist](https://gist.github.com/julienarcin/af2727307de2fd37d6a72973ea
 
 This node.js app allocates napbots bots based on the current [weather condition](https://platform.napbots.com/crypto-weather).
 
-![Screenshot](https://github.com/PierrickI3/Napbots/images/screenshot.png)
+![Screenshot](https://github.com/PierrickI3/napbots/images/screenshot.png)
 
 ## Requirements
 
