@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node index",
+    "force_mild_bull": "node index force_mild_bull"
   },
   "keywords": [],
   "author": "",

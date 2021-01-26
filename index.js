@@ -123,6 +123,7 @@ const getCryptoWeater = async () => {
     return;
   }
 
+  console.log('Current weather:', weatherApi.data.data.weather.weather);
   return weatherApi.data.data.weather.weather;
 };
 
@@ -178,6 +179,19 @@ const getCurrentAllocations = async (authToken) => {
 };
 
 const main = async () => {
+  process.stdout.write('\x1bc');
+
+  let args = process.argv;
+
+  let forcedComposition;
+  if (args.length > 2) {
+    switch (args[2]) {
+      case 'force_mild_bull':
+        forcedComposition = 'mild_bull';
+    }
+  }
+
+  if (!forcedComposition) {
   //#region Get weather
 
   let weather;
@@ -209,6 +223,11 @@ const main = async () => {
   }
 
   //#endregion
+  } else {
+    console.log('Forcing composition to:', forcedComposition);
+    compositionToSet = compositions[forcedComposition];
+  }
+
 
   //#region Login
 
@@ -272,18 +291,22 @@ const main = async () => {
         },
       };
 
-      console.log('Updating allocation to:', params);
-      let updateAllocationResponse = await axios({
-        url: 'https://middle.napbots.com/v1/account/' + exchange.id,
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          token: authToken,
-        },
-        data: params,
-      });
+      try {
+        console.log('Updating allocation to:', params);
+        await axios({
+          url: 'https://middle.napbots.com/v1/account/' + exchange.id,
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            token: authToken,
+          },
+          data: params,
+        });
+        console.log('Success!');
 
-      console.log('Success!');
+      } catch (error) {
+        console.error(error.response ? error.response.data : error);
+      }
     } else {
       console.log('No updates are necessary.');
     }
