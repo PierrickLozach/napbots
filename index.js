@@ -36,52 +36,30 @@ Bots:
 
   */
 
-//
 let compositions = {
   mild_bear: {
     compo: {
-      STRAT_BTC_USD_H_4_V2: 0.1,
-      STRAT_BTC_USD_FUNDING_8H_1: 0.1,
-      //STRAT_BTC_USD_H_3_V2: 0.00,
-      STRAT_BTC_USD_VOLUME_H_1: 0.05,
-      STRAT_ETH_USD_H_4_V2: 0.05,
-      STRAT_ETH_USD_FUNDING_8H_1: 0.05,
-      //STRAT_ETH_USD_H_3_V2: 0.00,
-      STRAT_BTC_ETH_VOLUME_H_1: 0.05,
-      STRAT_BTC_ETH_USD_H_1: 0.4,
-      STRAT_BTC_ETH_USD_LO_H_1: 0.2,
+      STRAT_BTC_USD_FUNDING_8H_1: 0.15,
+      STRAT_ETH_USD_FUNDING_8H_1: 0.15,
+      STRAT_BTC_ETH_USD_H_1: 0.7,
     },
     leverage: 1.0,
     botOnly: true,
   },
   mild_bull: {
     compo: {
-      //STRAT_BTC_USD_H_4_V2: 0.00,
-      STRAT_BTC_USD_FUNDING_8H_1: 0.15,
-      STRAT_BTC_USD_H_3_V2: 0.15,
-      STRAT_BTC_USD_VOLUME_H_1: 0.15,
-      //STRAT_ETH_USD_H_4_V2: 0,
-      STRAT_ETH_USD_FUNDING_8H_1: 0.15,
-      STRAT_ETH_USD_H_3_V2: 0.15,
-      STRAT_BTC_ETH_VOLUME_H_1: 0.25,
-      //STRAT_BTC_ETH_USD_H_1: 0.00,
-      //STRAT_BTC_ETH_USD_LO_H_1: 0.00
+      STRAT_BTC_USD_FUNDING_8H_1: 0.25,
+      STRAT_ETH_USD_FUNDING_8H_1: 0.25,
+      STRAT_BTC_ETH_USD_H_1: 0.5,
     },
     leverage: 1.5,
     botOnly: true,
   },
   extreme: {
     compo: {
-      STRAT_BTC_USD_H_4_V2: 0.2,
-      //STRAT_BTC_USD_FUNDING_8H_1: 0.00,
-      STRAT_BTC_USD_H_3_V2: 0.2,
-      //STRAT_BTC_USD_VOLUME_H_1: 0.00,
-      STRAT_ETH_USD_H_4_V2: 0.2,
-      //STRAT_ETH_USD_FUNDING_8H_1: 0.00,
-      STRAT_ETH_USD_H_3_V2: 0.2,
-      //STRAT_BTC_ETH_VOLUME_H_1: 0.00,
+      STRAT_ETH_USD_H_3_V2: 0.4,
+      STRAT_BTC_USD_H_3_V2: 0.4,
       STRAT_BTC_ETH_USD_H_1: 0.2,
-      //STRAT_BTC_ETH_USD_LO_H_1: 0.00
     },
     leverage: 1.0,
     botOnly: true,
@@ -149,37 +127,38 @@ const getAuthToken = async () => {
 };
 
 const getCurrentAllocations = async (authToken) => {
-    // Get current allocation for all exchanges
-    let currentAllocationResponse = await axios({
-      url: 'https://middle.napbots.com/v1/account/for-user/' + userId,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        token: authToken,
-      },
-    });
+  // Get current allocation for all exchanges
+  let currentAllocationResponse = await axios({
+    url: 'https://middle.napbots.com/v1/account/for-user/' + userId,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      token: authToken,
+    },
+  });
 
-    let currentAllocation = currentAllocationResponse.data.data;
+  let currentAllocation = currentAllocationResponse.data.data;
 
-    // Rebuild exchanges array
-    let exchanges = [];
-    for (let index = 0; index < currentAllocation.length; index++) {
-      const allocation = currentAllocation[index];
-      if (!allocation.accountId || !allocation.compo) {
-        //console.error('Invalid Exchange data for:', allocation.exchangeLabel);
-        continue; // Next
-      }
-      exchanges.push({
-        id: allocation.accountId,
-        compo: allocation.compo,
-      });
+  // Rebuild exchanges array
+  let exchanges = [];
+  for (let index = 0; index < currentAllocation.length; index++) {
+    const allocation = currentAllocation[index];
+    if (!allocation.accountId || !allocation.compo || !allocation.tradingActive) {
+      continue; // Next
     }
+    exchanges.push({
+      id: allocation.accountId,
+      compo: allocation.compo,
+    });
+  }
 
-    return exchanges;
+  return exchanges;
 };
 
 const main = async () => {
   process.stdout.write('\x1bc');
+
+  //#region Check command-line arguments
 
   let args = process.argv;
 
@@ -191,48 +170,50 @@ const main = async () => {
     }
   }
 
-  if (!forcedComposition) {
-  //#region Get weather
-
-  let weather;
-  try {
-    weather = await getCryptoWeater();
-  } catch (error) {
-    console.error(error);
-    return;
-  }
-
   //#endregion
-
-  //#region Set composition based on weather
 
   let compositionToSet;
-  switch (weather) {
-    case 'Extreme markets':
-      compositionToSet = compositions.extreme;
-      break;
-    case 'Mild bull markets':
-      compositionToSet = compositions.mild_bull;
-      break;
-    case 'Mild bear or range markets':
-      compositionToSet = compositions.mild_bear;
-      break;
-    default:
-      console.error('Unknown weather condition:', weather);
-      return;
-  }
 
-  //#endregion
+  if (!forcedComposition) {
+    //#region Get weather
+
+    let weather;
+    try {
+      weather = await getCryptoWeater();
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    //#endregion
+
+    //#region Set composition based on weather
+
+    switch (weather) {
+      case 'Extreme markets':
+        compositionToSet = compositions.extreme;
+        break;
+      case 'Mild bull markets':
+        compositionToSet = compositions.mild_bull;
+        break;
+      case 'Mild bear or range markets':
+        compositionToSet = compositions.mild_bear;
+        break;
+      default:
+        console.error('Unknown weather condition:', weather);
+        return;
+    }
   } else {
     console.log('Forcing composition to:', forcedComposition);
     compositionToSet = compositions[forcedComposition];
   }
 
+  //#endregion
 
   //#region Login
 
   let authToken;
-  console.log('Authenticating...')
+  console.log('Authenticating...');
   try {
     authToken = await getAuthToken();
   } catch (error) {
@@ -247,7 +228,6 @@ const main = async () => {
   let exchanges;
   try {
     exchanges = await getCurrentAllocations(authToken);
-    //console.log('Exchanges:', exchanges);
   } catch (error) {
     console.error(error);
     return;
@@ -255,13 +235,11 @@ const main = async () => {
 
   //#endregion
 
-  // Time to update allocations
+  //#region Update allocations
+
   // For each exchange, update allocation if different from the current crypto weather
   for (let index = 0; index < exchanges.length; index++) {
     const exchange = exchanges[index];
-    //console.log('Current exchange:', exchange);
-
-    // Don't update by default
     let toUpdate = false;
 
     // If leverage different, set to update
@@ -271,10 +249,7 @@ const main = async () => {
     }
 
     // If composition different, set to update
-    //console.log('Exchange.compo:', exchange.compo.compo);
-    //console.log('CompositionToSet.compo:', compositionToSet.compo)
     let equalCompos = deepEqual(exchange.compo.compo, compositionToSet.compo);
-    //console.log('Equal Compos:', equalCompos);
     if (!equalCompos) {
       console.log('=> Compositions are different');
       toUpdate = true;
@@ -292,7 +267,7 @@ const main = async () => {
       };
 
       try {
-        console.log('Updating allocation to:', params);
+        console.log('Updating allocation to:', params, 'for', exchange);
         await axios({
           url: 'https://middle.napbots.com/v1/account/' + exchange.id,
           method: 'PATCH',
@@ -303,7 +278,6 @@ const main = async () => {
           data: params,
         });
         console.log('Success!');
-
       } catch (error) {
         console.error(error.response ? error.response.data : error);
       }
@@ -311,6 +285,8 @@ const main = async () => {
       console.log('No updates are necessary.');
     }
   }
+
+  //#endregion
 };
 
 main();
