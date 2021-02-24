@@ -243,7 +243,7 @@ const main = async () => {
     let toUpdate = false;
 
     // If leverage different, set to update
-    if (exchange.compo.leverage !== compositionToSet.leverage) {
+    if (exchange.compo.leverage.toFixed(2) !== compositionToSet.leverage.toFixed(2)) {
       console.log('=> Leverage is different');
       toUpdate = true;
     }
