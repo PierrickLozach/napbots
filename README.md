@@ -21,7 +21,7 @@ This node.js app allocates napbots bots based on the current [weather condition]
 - Create a new file called `.env` and add the following entries:
   - `NAPBOTS_EMAIL=email@domain.com` (Email address you use to login to Napbots)
   - `NAPBOTS_PASSWORD=mypassword` (your Napbots password)
-  - User id: `NAPBOTS_USERID=xxxxxxxxxxxxx` (check above on how to get your user id)
+  - `NAPBOTS_USERID=xxxxxxxxxxxxx` (check above on how to get your user id)
 - Run the app: `npm start`
 - Wait until the app is done with either `Success!`, `No updates are necessary` or an error message if something bad happened.
 
