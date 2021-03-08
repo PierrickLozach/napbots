@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "serverless-dotenv-plugin": "^3.8.1"
   },
   "devDependencies": {
     "serverless-offline": "^6.8.0",

@@ -21,6 +21,7 @@ package:
     - serverless.yml
     - .serverless/**
 plugins:
+  - serverless-dotenv-plugin
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-common-excludes
