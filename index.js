@@ -6,9 +6,28 @@ const axios = require('axios').default;
 
 //#region Account details
 
+require('dotenv').config();
+
 let email = process.env.NAPBOTS_EMAIL;
+if (!email) {
+  console.error('Missing NAPBOTS_EMAIL, please look at the README.md file to find out how to configure your environment before running this program.');
+  return;
+}
+console.log('email', email)
+
 let password = process.env.NAPBOTS_PASSWORD;
+if (!password) {
+  console.error('Missing NAPBOTS_PASSWORD, please look at the README.md file to find out how to configure your environment before running this program.');
+  return;
+}
+
 let userId = process.env.NAPBOTS_USERID; // How to find userId: https://imgur.com/a/fW4I8Be
+if (!userId) {
+  console.error('Missing NAPBOTS_USERID, please look at the README.md file to find out how to configure your environment before running this program.');
+  return;
+}
+
+//process.stdout.write('\x1bc');
 
 //#endregion
 
@@ -156,7 +175,6 @@ const getCurrentAllocations = async (authToken) => {
 };
 
 const main = async () => {
-  process.stdout.write('\x1bc');
 
   //#region Check command-line arguments
 
