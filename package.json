@@ -15,6 +15,7 @@
     "dotenv": "^8.2.0"
   },
   "devDependencies": {
+    "serverless-offline": "^6.8.0",
     "serverless-plugin-common-excludes": "^3.0.1",
     "serverless-prune-plugin": "^1.4.4"
   }

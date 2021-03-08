@@ -11,8 +11,8 @@ provider:
   versionFunctions: false
   logRetentionInDays: 7
 functions:
-  crawl:
-    handler: index
+  updateNapbots:
+    handler: handler.updateNapbots
     events:
       - schedule: rate(10 minutes)
 package:
@@ -21,5 +21,6 @@ package:
     - serverless.yml
     - .serverless/**
 plugins:
+  - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-common-excludes
