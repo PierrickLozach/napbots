@@ -29,3 +29,8 @@ This node.js app allocates napbots bots based on the current [weather condition]
 
 - To add another bot in the composition, check [this image](https://imgur.com/a/ayit9pR) to find out how to retrieve a bot id
 - Edit `index.js` and change the `compositions` object accordingly
+
+## Running as an AWS lambda
+
+- Login to your AWS account via the AWS CLI: `aws configure`
+- Run `serverless deploy`. Default is set to run every 10 minutes.
