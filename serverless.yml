@@ -1,0 +1,25 @@
+service: napbots-scheduler
+app: napbots
+useDotenv: true
+custom:
+  prune:
+    automatic: true
+    number: 1
+provider:
+  name: aws
+  runtime: nodejs12.x
+  versionFunctions: false
+  logRetentionInDays: 7
+functions:
+  crawl:
+    handler: index
+    events:
+      - schedule: rate(10 minutes)
+package:
+  exclude:
+    - .git/**
+    - serverless.yml
+    - .serverless/**
+plugins:
+  - serverless-prune-plugin
+  - serverless-plugin-common-excludes
