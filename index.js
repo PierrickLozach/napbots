@@ -61,7 +61,7 @@ let compositions = {
       STRAT_BTC_USD_FUNDING_8H_1: 0.15,
       STRAT_ETH_USD_FUNDING_8H_1: 0.15,
       STRAT_BTC_USD_H_4_V2: 0.15,
-      STRAT_BTC_ETH_USD_H_1: 0.4,
+      STRAT_BTC_ETH_USD_H_1: 0.55,
     },
     leverage: 1.0,
     botOnly: true,
