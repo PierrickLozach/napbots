@@ -68,9 +68,9 @@ let compositions = {
   },
   mild_bull: {
     compo: {
-      STRAT_ETH_USD_H_3_V2: 0.15,
-      STRAT_BTC_USD_H_3_V2: 0.15,
-      STRAT_BTC_ETH_USD_H_1: 0.7,
+      STRAT_ETH_USD_H_3_V2: 0.25,
+      STRAT_BTC_USD_H_3_V2: 0.25,
+      STRAT_BTC_ETH_USD_H_1: 0.5,
     },
     leverage: 1.5,
     botOnly: true,
