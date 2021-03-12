@@ -3,6 +3,7 @@
 // SEE README FOR DETAILS
 
 const axios = require('axios').default;
+const compositions = require('./compositions').compositions;
 
 //#region Account details
 
@@ -27,68 +28,9 @@ if (!userId) {
   return;
 }
 
-//process.stdout.write('\x1bc');
-
 //#endregion
 
-//#region Weather dependent compositions
-
-/*
-
-- Total of allocations should be equal to 1 (e.g. 0.6 + 0.4)
-- Leverage should be between 0.00 and 1.50
-- How to find bot IDs: https://imgur.com/a/ayit9pR
-- Assignments is based on Napbots recommendations: https://platform.napbots.com/crypto-weather and on bot performance
-
-Bots:
-  . NapoX BTC AR hourly: STRAT_BTC_USD_H_4_V2 (402%)
-  . NapoX BTC Funding AR hourly: STRAT_BTC_USD_FUNDING_8H_1 (536%)
-  . NapoX BTC Ultra flex AR hourly: STRAT_BTC_USD_H_3_V2 (336%)
-  . NapoX BTC Volume AR daily: STRAT_BTC_USD_VOLUME_H_1 (224%)
-  . NapoX ETH AR hourly: STRAT_ETH_USD_H_4_V2 (359%)
-  . NapoX ETH Funding AR hourly: STRAT_ETH_USD_FUNDING_8H_1 (276%)
-  . NapoX ETH Ultra flex AR hourly: STRAT_ETH_USD_H_3_V2 (632%)
-  . NapoX ETH Volume AR daily: STRAT_BTC_ETH_VOLUME_H_1 (447%)
-  . NapoX alloc ETH/BTC/USD AR hourly: STRAT_BTC_ETH_USD_H_1 (1230%)
-  . NapoX alloc ETH/BTC/USD LO hourly: STRAT_BTC_ETH_USD_LO_H_1 (561%)
-
-
-  */
-
-let compositions = {
-  mild_bear: {
-    compo: {
-      STRAT_BTC_USD_FUNDING_8H_1: 0.15,
-      STRAT_ETH_USD_FUNDING_8H_1: 0.15,
-      STRAT_BTC_USD_H_4_V2: 0.15,
-      STRAT_BTC_ETH_USD_H_1: 0.55,
-    },
-    leverage: 1.0,
-    botOnly: true,
-  },
-  mild_bull: {
-    compo: {
-      STRAT_ETH_USD_H_3_V2: 0.25,
-      STRAT_BTC_USD_H_3_V2: 0.25,
-      STRAT_BTC_ETH_USD_H_1: 0.5,
-    },
-    leverage: 1.5,
-    botOnly: true,
-  },
-  extreme: {
-    compo: {
-      STRAT_BTC_ETH_USD_H_1: 0.2,
-      STRAT_ETH_USD_H_3_V2: 0.4,
-      STRAT_BTC_USD_H_3_V2: 0.4,
-    },
-    leverage: 0.5,
-    botOnly: true,
-  },
-};
-
-//#endregion
-
-//#region Script (do not touch here)
+//#region Script (do not change)
 
 const deepEqual = (x, y) => {
   if (x === y) {
@@ -208,6 +150,7 @@ const main = async () => {
 
     //#region Set composition based on weather
 
+    console.log('Compositions:', compositions)
     switch (weather) {
       case 'Extreme markets':
         compositionToSet = compositions.extreme;
