@@ -22,12 +22,6 @@ if (!password) {
   return;
 }
 
-let userId = process.env.NAPBOTS_USERID; // How to find userId: https://imgur.com/a/fW4I8Be
-if (!userId) {
-  console.error('Missing NAPBOTS_USERID, please look at the README.md file to find out how to configure your environment before running this program.');
-  return;
-}
-
 //#endregion
 
 //#region Script (do not change)
@@ -88,7 +82,7 @@ const getAuthToken = async () => {
   return authToken;
 };
 
-const getCurrentAllocations = async (authToken) => {
+const getCurrentAllocations = async (authToken, userId) => {
   // Get current allocation for all exchanges
   let currentAllocationResponse = await axios({
     url: 'https://middle.napbots.com/v1/account/for-user/' + userId,
@@ -115,6 +109,25 @@ const getCurrentAllocations = async (authToken) => {
   }
 
   return exchanges;
+};
+
+const getUserId = async (authToken) => {
+  let userMeApi = await axios({
+    url: 'https://middle.napbots.com/v1/user/me',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      token: authToken,
+    },
+  });
+
+  if (!userMeApi) {
+    console.error('Failed to retrieve my user info.');
+    return;
+  }
+
+  console.log('User id:', userMeApi.data.data.userId);
+  return userMeApi.data.data.userId;
 };
 
 const main = async () => {
@@ -183,13 +196,22 @@ const main = async () => {
     return;
   }
 
+  // Get User Id
+  let userId;
+  try {
+    userId = await getUserId(authToken);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+
   //#endregion
 
   //#region Get Exchanges
 
   let exchanges;
   try {
-    exchanges = await getCurrentAllocations(authToken);
+    exchanges = await getCurrentAllocations(authToken, userId);
   } catch (error) {
     console.error(error);
     return;
