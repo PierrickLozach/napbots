@@ -23,7 +23,10 @@ To select a composition, set the 'selectedComposition' variable below
 
 */
 
-let selectedComposition = 1;
+// 0 => Napbots (at least, my interpretation)
+// 1 => Thomas (Telegram)
+// 2 => Bitpoule (Telegram)
+let selectedComposition = 2;
 
 let compositions = [
   // Napbots recommended composition
@@ -104,7 +107,48 @@ let compositions = [
       leverage: 0.5,
       botOnly: true
     }
-  }
+  },
+    // Bitpool (from Telegram) composition
+    {
+      mild_bear: {
+        compo: {
+          STRAT_BTC_ETH_USD_H_1: 0.2,
+          STRAT_BTC_USD_FUNDING_8H_1: 0.1,
+          STRAT_ETH_USD_FUNDING_8H_1: 0.1,
+          STRAT_ETH_USD_H_4_V2: 0.1,
+          STRAT_BTC_USD_H_4_V2: 0.1,
+          STRAT_ETH_USD_H_3_V2: 0.1,
+          STRAT_BTC_USD_H_3_V2: 0.1,
+          STRAT_BTC_USD_VOLUME_H_1: 0.1,
+          STRAT_ETH_USD_VOLUME_H_1: 0.1,
+        },
+        leverage: 1,
+        botOnly: true
+      },
+      mild_bull: {
+        compo: {
+          STRAT_BTC_ETH_USD_H_1: 0.7,
+          STRAT_BTC_USD_FUNDING_8H_1: 0.05,
+          STRAT_ETH_USD_FUNDING_8H_1: 0.05,
+          STRAT_ETH_USD_VOLUME_H_1: 0.05,
+          STRAT_BTC_USD_VOLUME_H_1: 0.05,
+          STRAT_BNB_USD_LO_D_1: 0.10,
+        },
+        leverage: 1.5,
+        botOnly: true
+      },
+      extreme: {
+        compo: {
+          STRAT_ETH_USD_H_3_V2: 0.23,
+          STRAT_BTC_USD_H_3_V2: 0.23,
+          STRAT_ETH_USD_H_4_V2: 0.22,
+          STRAT_BTC_USD_H_4_V2: 0.22,
+          STRAT_BNB_USD_LO_D_1: 0.10,
+        },
+        leverage: 1,
+        botOnly: true
+      }
+    }
 ];
 
 exports.compositions = compositions[selectedComposition];
