@@ -16,16 +16,12 @@ Bots:
   . NapoX alloc ETH/BTC/USD LO hourly: STRAT_BTC_ETH_USD_LO_H_1
 
 2 compositions are available:
-  0 => Napbots default composition
-  1 => Thomas (from Telegram) composition
+  0 => Napbots (at least, my interpretation)
+  1 => Thomas (Telegram)
+  2 => Bitpoule (Telegram)
 
 To select a composition, set the 'selectedComposition' variable below
-
 */
-
-// 0 => Napbots (at least, my interpretation)
-// 1 => Thomas (Telegram)
-// 2 => Bitpoule (Telegram)
 let selectedComposition = 2;
 
 let compositions = [
