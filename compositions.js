@@ -22,7 +22,7 @@ Bots:
 
 To select a composition, set the 'selectedComposition' variable below
 */
-let selectedComposition = 2;
+let selectedComposition = 0;
 
 let compositions = [
   // Napbots recommended composition
